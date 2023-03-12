@@ -1,2 +1,2 @@
 # PengTune
-App de musica báscio
+App de musica básico
