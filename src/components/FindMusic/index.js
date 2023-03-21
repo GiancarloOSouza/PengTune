@@ -1,28 +1,71 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
+import TrackPlayer, {
+  Event,
+  RepeatMode,
+  State,
+  usePlaybackState,
+  useProgress,
+  useTrackPlayerEvents,
+} from 'react-native-track-player';
+
+import songs from '../../../model/data.js'
+
+const setupPlayer = async () => {
+  // Set up the player
+  await TrackPlayer.setupPlayer();
+
+  // Add a track to the queue
+  await TrackPlayer.add(songs);
+
+  // Start playing it
+  await TrackPlayer.play();
+}
+
+const togglePlayBack = async(playbackState) => {
+  const currentTrack = await TrackPlayer.getActiveTrackIndex()();
+  if(currentTrack != null ){
+    if(playbackState == State.Paused){
+      await TrackPlayer.play()
+    } else{
+      await TrackPlayer.pause()
+    }
+  }
+}
 
 export default function MusicPlayerScreen({ navigation }) {
+  const playbackState = usePlaybackState()
+
+  useEffect(()=>{
+    setupPlayer()
+  })
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={require('../../../assets/back.png')} style={styles.backButton} />
+          <Image source={require('../../../assets/arrow_2.png')} style={styles.backButton} />
         </TouchableOpacity>
-        <Text style={styles.title}>Now Playing</Text>
+        <Image source={require('../../../assets/logo.png')} style={styles.logo} />
         <TouchableOpacity>
           <Image source={require('../../../assets/more.png')} style={styles.moreButton} />
         </TouchableOpacity>
       </View>
       <View style={styles.albumArtContainer}>
-      <LinearGradient
-        colors={['#09001F', '#767676']}
-        style={styles.albumArtContainer}/>
-        {/*         <Image source={require('../../../assets/alok-art.png')} style={styles.albumArt} />
-        <View style={styles.songInfo}>
-          <Text style={styles.songTitle}>Deep Down</Text>
-          <Text style={styles.artistName}>Alok</Text>
-        </View> */}
+
+
+        <LinearGradient
+          colors={['#1f203f', '#3e407e']}
+          locations={[0.2, 0.9]}
+          style={styles.albumArtContainer}>
+          <Image source={require('../../../assets/artSongs/alok-art.png')} style={styles.albumArt} />
+          <View style={styles.songInfo}>
+            <Text style={styles.songTitle}>Deep Down</Text>
+            <Text style={styles.artistName}>Artista - Alok</Text>
+          </View>
+
+        </LinearGradient>
+
       </View>
 
       <View style={styles.controls}>
@@ -30,13 +73,19 @@ export default function MusicPlayerScreen({ navigation }) {
           <Image source={require('../../../assets/shuffle.png')} style={styles.shuffleButton} />
         </TouchableOpacity>
         <TouchableOpacity>
-          <Image source={require('../../../assets/previous.png')} style={styles.previousButton} />
+          <Image source={require('../../../assets/twice-back.png')} style={styles.twiceBackButton} />
         </TouchableOpacity>
         <TouchableOpacity>
+          <Image source={require('../../../assets/previous.png')} style={styles.previousButton} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={()=>togglePlayBack(playbackState)}>
           <Image source={require('../../../assets/play.png')} style={styles.playButton} />
         </TouchableOpacity>
         <TouchableOpacity>
-          <Image source={require('../../../assets/next.png')} style={styles.nextButton} />
+          <Image source={require('../../../assets/next.png')} style={styles.backMusicButton} />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Image source={require('../../../assets/twice-back.png')} style={styles.twice2BackButton} />
         </TouchableOpacity>
         <TouchableOpacity>
           <Image source={require('../../../assets/repeat.png')} style={styles.repeatButton} />
@@ -45,6 +94,8 @@ export default function MusicPlayerScreen({ navigation }) {
     </View>
   );
 }
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -66,6 +117,7 @@ const styles = StyleSheet.create({
   backButton: {
     width: 24,
     height: 24,
+    transform: [{ rotate: '180deg'}]
   },
   moreButton: {
     width: 24,
@@ -82,13 +134,16 @@ const styles = StyleSheet.create({
     height: 350,
     margin: 60,
     borderRadius: 20,
-    
-
   },
   albumArt: {
     width: 200,
     height: 200,
-    margin: 20
+    margin: 20,
+    borderRadius: 20,
+  },
+  logo:{
+    width: 70,
+    height: 70,
   },
   songInfo: {
     flex: 1,
@@ -100,37 +155,53 @@ const styles = StyleSheet.create({
   },
   artistName: {
     fontSize: 18,
-    color: '#888',
+    color: '#CCD1D1',
   },
   controls: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 32,
+    marginVertical: 140,
   },
   shuffleButton: {
     width: 24,
     height: 24,
-    margin: 10
+    margin: 5
   },
   previousButton: {
     width: 24,
     height: 24,
-    margin: 10
+    margin: 5
+  },
+  twiceBackButton: {
+    width: 24,
+    height: 24,
+    margin: 5
+  },
+  twice2BackButton: {
+    width: 24,
+    height: 24,
+    margin: 5,
+    transform: [{ rotate: '180deg'}]
   },
   playButton: {
     width: 24,
     height: 24,
-    margin: 10
+    margin: 5
   },
-  nextButton: {
+  nextMusicButton: {
     width: 24,
     height: 24,
-    margin: 10
+    margin: 5
+  },
+  backMusicButton: {
+    width: 24,
+    height: 24,
+    margin: 5,
+    transform: [{ rotate: '180deg'}]
   },
   repeatButton: {
     width: 24,
     height: 24,
-    margin: 10
+    margin: 5
   },
 });
