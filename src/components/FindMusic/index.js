@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from '@react-navigation/native';
@@ -6,42 +6,115 @@ import { Audio } from 'expo-av';
 import bdSongs from '../../../model/data'
 
 
-export default function MusicPlayerScreen({ navigation , route}) {
+export default function MusicPlayerScreen({ navigation, route }) {
 
-  const item  = route.params;
+  const item = route.params;
+
+  const [soundObject, setSoundObject] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [position, setPosition] = useState(0);
+  const [duration, setDuration] = useState(null);
 
   let chosenSong
-  const [sound, setSound] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  let otherSong
 
-  bdSongs.map((music)=>{
-    if(item.id == music.id){
+  console.log('Começa aqui')
+
+  bdSongs.map((music) => {
+    if (item.id == music.id) {
       chosenSong = music
       return chosenSong
-    }else{
-      return 0
+    } else {
+      otherSong = music
+      return otherSong
     }
   })
 
-  async function playSound() {
 
-    const { sound } = await Audio.Sound.createAsync(
-      chosenSong.url
-    );
-    setSound(sound);
-    setIsPlaying(true);
-    await sound.playAsync();
+
+  useEffect(() => {
+    async function loadAudio() {
+      const { sound } = await Audio.Sound.createAsync(
+        chosenSong.url
+      );
+      setSoundObject(sound);
+    }
+    loadAudio();
+  }, []);
+
+  async function playPauseSound() {
+    try {
+      if (!isPlaying) {
+        await soundObject.playAsync();
+        setIsPlaying(true);
+      } else {
+        await soundObject.pauseAsync();
+        setIsPlaying(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  async function stopSound() {
-    setIsPlaying(false);
-    await sound.stopAsync();
+  useEffect(()=>{
+    playPauseSound()
+  },[soundObject])
+
+
+  useEffect(() => {
+    async function updatePosition() {
+      const { positionMillis, durationMillis } = await soundObject.getStatusAsync();
+      setPosition(positionMillis);
+      setDuration(durationMillis);
+    }
+    const intervalId = setInterval(updatePosition, 1000);
+    return () => clearInterval(intervalId);
+  }, [soundObject]);
+
+  /*   async function playPauseSound() {
+      try {
+        if(!isPlaying){
+          await soundObject.playAsync();
+          setIsPlaying(true);
+        } else {
+          await soundObject.pauseAsync();
+          setIsPlaying(false);
+        }
+        
+      } catch (error) {
+        console.log(error);
+      }
+    } */
+
+  async function pauseSound() {
+    try {
+      await soundObject.pauseAsync();
+      setIsPlaying(false);
+    } catch (error) {
+      console.log(error);
+    }
   }
+
+  async function seekAudio(value) {
+    try {
+      await soundObject.setPositionAsync(value);
+      setPosition(value);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  /*   if (!soundObject) {
+      return null;
+    }
+   */
+  const progressBarWidth = `${(position / duration) * 100}%`;
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.navigate('ListSongs')}>
-          <Image source={require('../../../assets/arrow_2.png')} style={styles.backButton}/>
+          <Image source={require('../../../assets/arrow_2.png')} style={styles.backButton} />
         </TouchableOpacity>
         <Image source={require('../../../assets/logo.png')} style={styles.logo} />
         <TouchableOpacity>
@@ -68,26 +141,33 @@ export default function MusicPlayerScreen({ navigation , route}) {
           <Image source={require('../../../assets/shuffle.png')} style={styles.shuffleButton} />
         </TouchableOpacity>
         <TouchableOpacity>
-          <Image source={require('../../../assets/twice-back.png')} style={styles.twiceBackButton} />
-        </TouchableOpacity>
-        <TouchableOpacity>
           <Image source={require('../../../assets/previous.png')} style={styles.previousButton} />
         </TouchableOpacity>
-        {!isPlaying && <TouchableOpacity onPress={playSound} title='Play'>
+        {!isPlaying ? (<TouchableOpacity onPress={playPauseSound} title='Play'>
           <Image source={require('../../../assets/play.png')} style={styles.playButton} />
-        </TouchableOpacity>}
-        {isPlaying && <TouchableOpacity onPress={stopSound} title='Stop'>
-          <Image source={require('../../../assets/pausa.png')} style={styles.backMusicButton} />
-        </TouchableOpacity>}
+        </TouchableOpacity>) :
+          (<TouchableOpacity onPress={playPauseSound} title='Stop'>
+            <Image source={require('../../../assets/pausa.png')} style={styles.backMusicButton} />
+          </TouchableOpacity>)}
         <TouchableOpacity>
           <Image source={require('../../../assets/next.png')} style={styles.backMusicButton} />
         </TouchableOpacity>
         <TouchableOpacity>
-          <Image source={require('../../../assets/twice-back.png')} style={styles.twice2BackButton} />
-        </TouchableOpacity>
-        <TouchableOpacity>
           <Image source={require('../../../assets/repeat.png')} style={styles.repeatButton} />
         </TouchableOpacity>
+      </View>
+      <View style={styles.progressBarCenter}>
+        <View style={styles.progressBar}>
+          <View style={[styles.progressBarValue, { width: progressBarWidth }]} />
+          <TouchableOpacity
+            style={[styles.progressBarThumb, { left: progressBarWidth }]}
+            onPress={(e) => {
+              const position = e.nativeEvent.locationX;
+              const newPosition = (position / 200) * duration;
+              seekAudio(newPosition);
+            }}
+          />
+        </View>
       </View>
     </View>
   );
@@ -157,7 +237,6 @@ const styles = StyleSheet.create({
   controls: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginVertical: 140,
   },
   shuffleButton: {
     width: 24,
@@ -201,4 +280,20 @@ const styles = StyleSheet.create({
     height: 24,
     margin: 5
   },
+  progressBar: {
+    backgroundColor: 'white',
+    width: '80%',
+    height: 5,
+    borderRadius: 5,
+    overflow: 'hidden',
+  },
+  progressBarValue: {
+    height: 5,
+    backgroundColor: '#8D8EB4',
+  },
+  progressBarCenter: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 20,
+  }
 });
