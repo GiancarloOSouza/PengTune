@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Button, TouchableOpacity, Image, Text } from 'react-native';
 import songs from '../../../model/data'
 
-export default function ListSongs({ navigation }) {
+export default function ListSongs({ navigation, route}) {
 
+  const album = route.params;
   const [music, setMusic] = useState([])
-  
+
 
   /*   const [idSongs, setIdSongs] = useState()
     const [allSongs, setAllSongs] = useState()
@@ -44,7 +45,7 @@ export default function ListSongs({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.navigate('ListSongs')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Teste')}>
           <Image source={require('../../../assets/arrow_2.png')} style={styles.backButton} />
         </TouchableOpacity>
         <Image source={require('../../../assets/logo.png')} style={styles.logo} />
@@ -54,29 +55,32 @@ export default function ListSongs({ navigation }) {
       </View>
 
       {songs.map((songs) => {
-        return (
-          <View key={songs.id} style={styles.containerSong}>
-            <TouchableOpacity style={styles.containerSong2} onPress={() => navigation.navigate('PlaySongs', songs)}>
-              <Image key={songs.id} source={songs.artSongs} style={styles.image} />
-              <View style={styles.padding}>
-                <Text style={styles.songTitle}>{songs.title}</Text>
-                <Text style={styles.artistName}>{songs.artist}</Text>
-              </View>
-            </TouchableOpacity>
-
-            <View style={styles.heart}>
-              {!songs.liked ? <TouchableOpacity>
-                <Image source={require('../../../assets/heart_no_filled.png')} style={styles.imageHeart} />
-              </TouchableOpacity> :
-                <TouchableOpacity>
-                  <Image source={require('../../../assets/heart_filled.png')} style={styles.imageHeart} />
-                </TouchableOpacity>}
-              <TouchableOpacity style={styles.options}>
-                <Image source={require('../../../assets/more.png')} style={styles.moreButton} />
+        if (songs.album == album) {
+          return (
+            <View key={songs.id} style={styles.containerSong}>
+              <TouchableOpacity style={styles.containerSong2} onPress={() => navigation.navigate('PlaySongs', songs)}>
+                <Image key={songs.id} source={songs.artSongs} style={styles.image} />
+                <View style={styles.padding}>
+                  <Text style={styles.songTitle}>{songs.title}</Text>
+                  <Text style={styles.artistName}>{songs.artist}</Text>
+                </View>
               </TouchableOpacity>
+
+              <View style={styles.heart}>
+                {!songs.liked ? <TouchableOpacity>
+                  <Image source={require('../../../assets/heart_no_filled.png')} style={styles.imageHeart} />
+                </TouchableOpacity> :
+                  <TouchableOpacity>
+                    <Image source={require('../../../assets/heart_filled.png')} style={styles.imageHeart} />
+                  </TouchableOpacity>}
+                <TouchableOpacity style={styles.options}>
+                  <Image source={require('../../../assets/more.png')} style={styles.moreButton} />
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        )
+          )
+        }
+
       })}
 
       {/* {music.map((songs) => {

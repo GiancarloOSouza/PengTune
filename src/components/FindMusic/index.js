@@ -6,7 +6,7 @@ import { Audio } from 'expo-av';
 import bdSongs from '../../../model/data'
 
 
-export default function MusicPlayerScreen({ navigation, route }) {
+export default function MusicPlayerScreen({ navigation, route}) {
 
   const item = route.params;
 
@@ -116,7 +116,7 @@ export default function MusicPlayerScreen({ navigation, route }) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.navigate('ListSongs')}>
+        <TouchableOpacity onPress={() => navigation.navigate('ListSongs', chosenSong.album)}>
           <Image source={require('../../../assets/arrow_2.png')} style={styles.backButton} />
         </TouchableOpacity>
         <Image source={require('../../../assets/logo.png')} style={styles.logo} />
