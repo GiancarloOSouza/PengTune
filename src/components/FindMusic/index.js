@@ -61,6 +61,9 @@ export default function MusicPlayerScreen({ navigation, route }) {
   },[soundObject])
 
 
+  
+
+
   useEffect(() => {
     async function updatePosition() {
       const { positionMillis, durationMillis } = await soundObject.getStatusAsync();
