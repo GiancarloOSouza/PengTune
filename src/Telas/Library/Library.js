@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Text, View, StyleSheet, StatusBar, Image, TextInput, Dimensions, ScrollView } from "react-native";
 import Carousel from "react-native-snap-carousel";
+import Rolagem from "../../components/Rolagem/Rolagem.js";
 
-export default function Library() {
+export default function Library({navigation}) {
     const [searchword, setSearchWord] = useState('');
 
     const { width } = Dimensions.get('window');
@@ -41,22 +42,29 @@ export default function Library() {
 
 
     return (
-        <View styles={styles.container}>
+        <ScrollView>
+        <View style={styles.container}>
             <StatusBar barStyle='light-contain' />
             <Image source={require('../../../assets/Imagens/pinguim-fone.png')} style={styles.imagem} />
             <TextInput placeholder="Pesquisar"
                 style={styles.barPesquisa}
                 onChangeText={setSearchWord} />
 
-            <Text style={styles.texto}>Álbuns  </Text>
+            <View style={styles.container1}>
 
-            <Carousel
-                data={items}
-                renderItem={renderItem}
-                sliderWidth={width}
-                itemWidth={width - 305}
-                itemHorizontalMargin={0}
-            />
+                <Text style={styles.texto}>Álbuns  </Text>
+
+                <Carousel
+                    data={items}
+                    renderItem={renderItem}
+                    sliderWidth={width}
+                    itemWidth={width - 305}
+                    itemHorizontalMargin={0}
+                />
+
+            </View>
+
+            <View style={styles.container1}>
 
             <Text style={styles.texto2}>Favoritas  </Text>
 
@@ -67,17 +75,31 @@ export default function Library() {
                 itemWidth={width - 260}
             />
 
+            </View>
+
             <Text style={styles.texto2}>Musicas Recente</Text>
 
+            <Rolagem />
+
+            
+           
 
 
 
         </View>
 
+        </ScrollView>
+
     )
 }
 
 const styles = StyleSheet.create({
+    container: {
+        backgroundColor: '#0588E8',
+        flex: 1
+
+    },
+
     imagem: {
         flex: 0,
         height: 100,

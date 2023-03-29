@@ -1,33 +1,44 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { View, Text, StyleSheet, Image } from 'react-native';
-import PlayButton from '../../components/PlayButton/PlayButton.js'
-import {Library} from "../Library/Library.js";
-import { NavigationContainer } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
+import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import PlayButton from "../../components/PlayButton/PlayButton";
+import Library from "../Library/Library";
+import { LinearGradient } from "expo-linear-gradient";
 
-export default function HomePage() {
+export default function HomePage({ navigation }) {
     return (
-        <View style={styles.container} >
+        <View style={styles.container}>
             <StatusBar />
-            <Image source={require('../../../assets/Imagens/pinguim-fone.png')}
-                style={{ marginTop: -80 }} />
+            <Image source={require('../../../assets/Imagens/pinguim-fone.png')} style={{ marginTop: -80 }} />
             <Text style={styles.texto}>PengTunes</Text>
 
             <Text style={styles.texto2}>Venha ouvir suas musicas no PengTunes, e desbloqueie seu potencial musical.</Text>
 
             <View>
-                <PlayButton onPress={Library}/>
+
+                <TouchableOpacity onPress={() => navigation.navigate('Library')} >
+                    <LinearGradient colors={['#2E49A6', '#5D359E', '#921F95']} style={styles.gradient}>
+                        <View style={styles.container2} >
+                            <Text style={styles.texto3}>        Tocar        </Text>
+                        </View>
+
+                    </LinearGradient>
+                </TouchableOpacity>
+
+
             </View>
         </View>
     )
 
-};
+}
+
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+        backgroundColor: '#0588E8'
     },
     texto: {
         fontSize: 40,
@@ -39,5 +50,20 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         margin: 35,
         color: '#fff'
-    }
+    },
+    gradient: {
+        borderRadius: 60,
+        height: 50,
+        marginTop: 20
+    },
+    texto3: {
+        color: '#fff'
+    },
+    container2: {
+        width: 100,
+        height: 43,
+        justifyContent: 'center',
+        textAlign: 'center'
+
+    },
 });
