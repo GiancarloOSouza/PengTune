@@ -1,7 +1,6 @@
 import React from "react";
 import { StatusBar } from "expo-status-bar";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
-import PlayButton from "../../components/PlayButton/PlayButton";
 import Library from "../Library/Library";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -9,7 +8,7 @@ export default function HomePage({ navigation }) {
     return (
         <View style={styles.container}>
             <StatusBar />
-            <Image source={require('../../../assets/Imagens/pinguim-fone.png')} style={{ marginTop: -80 }} />
+            <Image source={require('../../../assets/Imagens/pinguim-fone.png')} style={styles.logo} />
             <Text style={styles.texto}>PengTunes</Text>
 
             <Text style={styles.texto2}>Venha ouvir suas musicas no PengTunes, e desbloqueie seu potencial musical.</Text>
@@ -38,7 +37,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#0588E8'
+        backgroundColor: '#5255A8'
     },
     texto: {
         fontSize: 40,
@@ -66,4 +65,8 @@ const styles = StyleSheet.create({
         textAlign: 'center'
 
     },
+    logo: {
+        width:150,
+        height:200
+    }
 });

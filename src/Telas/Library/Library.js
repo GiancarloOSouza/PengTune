@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Text, View, StyleSheet, StatusBar, Image, TextInput, Dimensions, ScrollView } from "react-native";
+import { Text, View, StyleSheet, StatusBar, Image, TextInput, Dimensions, ScrollView, TouchableOpacity} from "react-native";
 import Carousel from "react-native-snap-carousel";
-import Rolagem from "../../components/Rolagem/Rolagem.js";
+import Rolagem from "../../components/Rolagem/Rolagem";
+import songs from "../../../model/data.js"
 
-export default function Library({navigation}) {
+export default function Library() {
     const [searchword, setSearchWord] = useState('');
 
     const { width } = Dimensions.get('window');
@@ -24,20 +25,24 @@ export default function Library({navigation}) {
         );
     };
 
-    const items2 = [
-        { id: 1, image2: require('../../../assets/Imagens/cd_cover.jpg') },
-        { id: 2, image2: require('../../../assets/Imagens/1600w-v4JfrRZCzw0.png') },
-        { id: 3, image2: require('../../../assets/Imagens/83903-wesley-safadao-banda-garota-safada-safadao-volume-maximo.jpg') },
-    ];
+    // const items2 = [
+    //     { id: 1, image2: require('../../../assets/Imagens/cd_cover.jpg') },
+    //     { id: 2, image2: require('../../../assets/Imagens/1600w-v4JfrRZCzw0.png') },
+    //     { id: 3, image2: require('../../../assets/Imagens/83903-wesley-safadao-banda-garota-safada-safadao-volume-maximo.jpg') },
+    // ];
+
+    const items2 = songs;
 
     const renderItem2 = ({ item, index }) => {
+        if (item.liked == true){
         return (
-            <View style={styles.itemContainer}>
-                <Image style={styles.image2} source={item.image2} />
-                <Text style={styles.title}>{item.title}</Text>
-                <Text style={styles.text}>{item.text}</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('PlaySongs', item)}>
+            <View style={styles.container}>
+                <Image style={styles.image2} source={item.artSongs} />
             </View>
+            </TouchableOpacity>
         );
+        }
     };
 
 
@@ -50,44 +55,38 @@ export default function Library({navigation}) {
                 style={styles.barPesquisa}
                 onChangeText={setSearchWord} />
 
-            <View style={styles.container1}>
+            <Text style={styles.texto}>Álbuns  {">"} </Text>
 
-                <Text style={styles.texto}>Álbuns  </Text>
+            <Carousel
+                data={items}
+                renderItem={renderItem}
+                sliderWidth={width}
+                itemWidth={width - 305}
+                itemHorizontalMargin={0}
+            />
 
-                <Carousel
-                    data={items}
-                    renderItem={renderItem}
-                    sliderWidth={width}
-                    itemWidth={width - 305}
-                    itemHorizontalMargin={0}
-                />
-
-            </View>
-
-            <View style={styles.container1}>
-
-            <Text style={styles.texto2}>Favoritas  </Text>
+            <Text style={styles.texto2}>Favoritas  {">"} </Text>
 
             <Carousel
                 data={items2}
                 renderItem={renderItem2}
                 sliderWidth={width}
                 itemWidth={width - 260}
+                loop={true}
             />
 
-            </View>
+            <View style={styles.baixo}>
 
-            <Text style={styles.texto2}>Musicas Recente</Text>
+            <Text style={styles.texto2}>Musicas Recente   {">"}</Text>
 
             <Rolagem />
 
-            
-           
+            </View>
+
 
 
 
         </View>
-
         </ScrollView>
 
     )
@@ -95,16 +94,17 @@ export default function Library({navigation}) {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#0588E8',
-        flex: 1
+        backgroundColor: '#5255A8'
+    },
+    baixo:{
+        marginTop: 80
 
     },
-
     imagem: {
         flex: 0,
-        height: 100,
-        width: 100,
-        marginTop: 15,
+        height: 80,
+        width: 80,
+        marginTop: 50,
 
     },
     barPesquisa: {
