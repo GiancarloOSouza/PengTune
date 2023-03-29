@@ -3,7 +3,10 @@ import { StyleSheet, View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import FindMusic from "./src/components/FindMusic/index.js";
+import SoundPlay from "./src/components/FindMusic/index2.js";
 import ListSongs from "./src/components/ListSongs/index.js";
+import HomePage from './src/Telas/Home/Home.js';
+import Library from './src/Telas/Library/Library.js';
 import Teste from './src/components/teste'
 const Stack = createStackNavigator();
 
@@ -13,8 +16,11 @@ export default function App() {
     <NavigationContainer >
       <Stack.Navigator style={styles.container}>
         {/* <Stack.Screen name="Teste" component={Teste} options={{ headerShown: false }} /> */}
+        <Stack.Screen name="HomePage" component={HomePage} options={{ headerShown: false }} />
+        <Stack.Screen name="Library" component={Library} options={{ headerShown: false }} />
         <Stack.Screen name="ListSongs" component={ListSongs} options={{ headerShown: false }} />
         <Stack.Screen name="PlaySongs" component={FindMusic} options={{ headerShown: false }} />
+        <Stack.Screen name="SoundPlay" component={SoundPlay} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

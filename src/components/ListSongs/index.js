@@ -45,7 +45,7 @@ export default function ListSongs({ navigation, route}) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.navigate('Teste')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Library')}>
           <Image source={require('../../../assets/arrow_2.png')} style={styles.backButton} />
         </TouchableOpacity>
         <Image source={require('../../../assets/logo.png')} style={styles.logo} />

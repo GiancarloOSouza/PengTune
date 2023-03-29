@@ -14,7 +14,7 @@ export default aleatorio =[
     artSongs: require('../assets/artSongs/Art-galwayGirl.png'),
     url: require('../assets/songs/Galway_Girl.mp3'),
     id: 2,
-    liked: false,
+    liked: true,
     album: 1
 },
 {
