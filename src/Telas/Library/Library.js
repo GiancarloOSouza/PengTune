@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Text, View, StyleSheet, StatusBar, Image, TextInput, Dimensions, ScrollView } from "react-native";
+import { Text, View, StyleSheet, StatusBar, Image, TextInput, Dimensions, ScrollView, TouchableOpacity } from "react-native";
 import Carousel from "react-native-snap-carousel";
 import Rolagem from "../../components/Rolagem/Rolagem.js";
-
-export default function Library({navigation}) {
+import songs from "../../../model/data.js"
+export default function Library({ navigation }) {
     const [searchword, setSearchWord] = useState('');
 
     const { width } = Dimensions.get('window');
@@ -24,69 +24,74 @@ export default function Library({navigation}) {
         );
     };
 
-    const items2 = [
-        { id: 1, image2: require('../../../assets/Imagens/cd_cover.jpg') },
-        { id: 2, image2: require('../../../assets/Imagens/1600w-v4JfrRZCzw0.png') },
-        { id: 3, image2: require('../../../assets/Imagens/83903-wesley-safadao-banda-garota-safada-safadao-volume-maximo.jpg') },
-    ];
+    /*     const items2 = [
+            { id: 1, image2: require('../../../assets/Imagens/cd_cover.jpg') },
+            { id: 2, image2: require('../../../assets/Imagens/1600w-v4JfrRZCzw0.png') },
+            { id: 3, image2: require('../../../assets/Imagens/83903-wesley-safadao-banda-garota-safada-safadao-volume-maximo.jpg') },
+        ]; */
+    const item2 = songs
 
     const renderItem2 = ({ item, index }) => {
-        return (
-            <View style={styles.itemContainer}>
-                <Image style={styles.image2} source={item.image2} />
-                <Text style={styles.title}>{item.title}</Text>
-                <Text style={styles.text}>{item.text}</Text>
-            </View>
-        );
+        if (item.liked == false) {
+            return (
+                <TouchableOpacity onPress={() => navigation.navigate('PlaySongs',  songs)}>
+                    <View style={styles.container}>
+                        <Image style={styles.image2} source={item.artSongs} />
+                    </View>
+                </TouchableOpacity>
+            );
+        }
+
     };
 
 
     return (
         <ScrollView>
-        <View style={styles.container}>
-            <StatusBar barStyle='light-contain' />
-            <Image source={require('../../../assets/Imagens/pinguim-fone.png')} style={styles.imagem} />
-            <TextInput placeholder="Pesquisar"
-                style={styles.barPesquisa}
-                onChangeText={setSearchWord} />
+            <View style={styles.container}>
+                <StatusBar barStyle='light-contain' />
+                <Image source={require('../../../assets/Imagens/pinguim-fone.png')} style={styles.imagem} />
+                <TextInput placeholder="Pesquisar"
+                    style={styles.barPesquisa}
+                    onChangeText={setSearchWord} />
 
-            <View style={styles.container1}>
+                <View style={styles.container1}>
 
-                <Text style={styles.texto}>Álbuns  </Text>
+                    <Text style={styles.texto}>Álbuns  </Text>
 
-                <Carousel
-                    data={items}
-                    renderItem={renderItem}
-                    sliderWidth={width}
-                    itemWidth={width - 305}
-                    itemHorizontalMargin={0}
-                />
+                    <Carousel
+                        data={items}
+                        renderItem={renderItem}
+                        sliderWidth={width}
+                        itemWidth={width - 305}
+                        itemHorizontalMargin={0}
+                    />
+
+                </View>
+
+                <View style={styles.container1}>
+
+                    <Text style={styles.texto2}>Favoritas  </Text>
+
+                    <Carousel
+                        data={item2}
+                        renderItem={renderItem2}
+                        sliderWidth={width}
+                        itemWidth={width - 260}
+                        loop={true}
+                    />
+
+                </View>
+
+                <Text style={styles.texto2}>Musicas Recente</Text>
+
+                <Rolagem />
+
+
+
+
+
 
             </View>
-
-            <View style={styles.container1}>
-
-            <Text style={styles.texto2}>Favoritas  </Text>
-
-            <Carousel
-                data={items2}
-                renderItem={renderItem2}
-                sliderWidth={width}
-                itemWidth={width - 260}
-            />
-
-            </View>
-
-            <Text style={styles.texto2}>Musicas Recente</Text>
-
-            <Rolagem />
-
-            
-           
-
-
-
-        </View>
 
         </ScrollView>
 
