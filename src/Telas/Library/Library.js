@@ -50,7 +50,7 @@ export default function Library() {
             <TouchableOpacity>
             <Image source={require('../../../assets/more.png')} style={styles.ponto} />
             </TouchableOpacity>
-            
+
             <TextInput placeholder="Pesquisar"
                 style={styles.barPesquisa}
                 onChangeText={setSearchWord} />
@@ -77,9 +77,18 @@ export default function Library() {
 
             <View style={styles.baixo}>
 
-            <Text style={styles.texto2}>Musicas Recente   {">"}</Text>
+            <Text style={styles.texto2}>Musicas  {">"}</Text>
 
-            <Rolagem />
+            {songs.map((item) => (
+                <TouchableOpacity style={styles.containerSong2} onPress={() => navigation.navigate('PlaySongs',  songs)}>
+                <Image key={songs.id} source={item.artSongs} style={styles.image3} />
+                <View style={styles.padding}>
+                  <Text style={styles.songTitle}>{item.title}</Text>
+                  <Text style={styles.artistName}>{item.artist}</Text>
+                </View>
+              </TouchableOpacity>
+            ))}
+
 
             </View>
 
@@ -103,6 +112,19 @@ const styles = StyleSheet.create({
         color: "#fff"
 
     },
+    containerSong2: {
+        flexDirection: 'row',
+        flex: 2,
+        alignItems: 'center',
+        alignContent: 'center',
+      },
+      image3: {
+        width: 80,
+        height: 80,
+        borderRadius: 10,
+        margin:10,
+        marginLeft: 20
+      },
     ponto: {
         height: 30,
         width: 30,
@@ -111,6 +133,17 @@ const styles = StyleSheet.create({
         marginBottom: 40
 
     },
+    padding: {
+        padding: 10
+      },
+      songTitle: {
+        fontSize: 16,
+        fontWeight: 'bold',
+      },
+      artistName: {
+        fontSize: 14,
+        color: '#CCD1D1',
+      },
     baixo:{
         marginTop: 80
 
