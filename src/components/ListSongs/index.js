@@ -3,8 +3,10 @@ import { StyleSheet, View, Button, TouchableOpacity, Image, Text } from 'react-n
 import songs from '../../../model/data'
 
 
-export default function ListSongs({ navigation }) {
+export default function ListSongs({ navigation, route }) {
 
+
+  const album = route
   const [pressHeart, setPressHeart] = useState(false);
   /*   const [idSongs, setIdSongs] = useState()
     const [allSongs, setAllSongs] = useState()
@@ -58,7 +60,8 @@ export default function ListSongs({ navigation }) {
               </View>
             </View>
           )
-        } else {
+        }
+/*         } else {
           return (
             <View key={songs.id} style={styles.containerSong}>
 
@@ -82,7 +85,7 @@ export default function ListSongs({ navigation }) {
             </View>
           )
 
-        }
+        } */
 
       })}
 
