@@ -23,13 +23,7 @@ export default function Library() {
                 <Text style={styles.text}>{item.text}</Text>
             </View>
         );
-    };
-
-    // const items2 = [
-    //     { id: 1, image2: require('../../../assets/Imagens/cd_cover.jpg') },
-    //     { id: 2, image2: require('../../../assets/Imagens/1600w-v4JfrRZCzw0.png') },
-    //     { id: 3, image2: require('../../../assets/Imagens/83903-wesley-safadao-banda-garota-safada-safadao-volume-maximo.jpg') },
-    // ];
+    }; 
 
     const items2 = songs;
 
@@ -51,6 +45,12 @@ export default function Library() {
         <View style={styles.container}>
             <StatusBar barStyle='light-contain' />
             <Image source={require('../../../assets/Imagens/pinguim-fone.png')} style={styles.imagem} />
+            <Text style={styles.peng}>PengTunes</Text>
+
+            <TouchableOpacity>
+            <Image source={require('../../../assets/more.png')} style={styles.ponto} />
+            </TouchableOpacity>
+            
             <TextInput placeholder="Pesquisar"
                 style={styles.barPesquisa}
                 onChangeText={setSearchWord} />
@@ -95,6 +95,21 @@ export default function Library() {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#5255A8'
+    },
+    peng:{
+        marginLeft:85,
+        marginTop: -48,
+        marginBottom: 30,
+        color: "#fff"
+
+    },
+    ponto: {
+        height: 30,
+        width: 30,
+        marginLeft: 360,
+        marginTop: -70,
+        marginBottom: 40
+
     },
     baixo:{
         marginTop: 80
